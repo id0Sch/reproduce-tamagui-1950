@@ -1,20 +1,43 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Button,View,Text, TamaguiProvider } from 'tamagui'
+import * as SplashScreen from 'expo-splash-screen';
 
-export default function App() {
+import { useFonts } from 'expo-font';
+import { useEffect } from 'react';
+import { config } from './tamagui.config';
+
+SplashScreen.preventAutoHideAsync();
+
+function App() {
+  const [loaded] = useFonts({
+    Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
+    InterBold: require("@tamagui/font-inter/otf/Inter-Bold.otf"),
+  });
+
+  useEffect(() => {
+    if (loaded){
+      SplashScreen.hideAsync()
+    }
+  }, [loaded])
+
+  if(!loaded){
+    return
+  }
+  
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+    <View padding={24} paddingTop={120}>
+      <Text >Open up App.tsx to start working on your app!</Text>
       <StatusBar style="auto" />
+      <Button>Hello world</Button>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default () => {
+  return (
+    <TamaguiProvider config={config}>
+      <App/>
+    </TamaguiProvider>
+
+  )
+}
